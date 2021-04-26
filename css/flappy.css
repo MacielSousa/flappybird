@@ -21,7 +21,6 @@
     position: absolute;
     width: 60px;
     left: calc(50% - 30px);
-    bottom: 50%;
 }
 
 .par-de-barreiras {
@@ -54,10 +53,11 @@
     border-right: 2px solid #000;
 }
 
-.porgresso {
+.progresso {
     position: absolute;
     top: 10px;
     right: 10px;
     font-family: Pixel;
     font-size: 70px;
+    z-index: 100; /* Propriedade que deixa o elemento acima do outro */
 }
