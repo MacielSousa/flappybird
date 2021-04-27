@@ -17,22 +17,18 @@ function Barreira(reversa = false) {
 
     this.setAltura = altura => corpo.style.height = `${altura}px`
 }
-/*
-const b = new Barreira(true)
-b.setAltura(300)
-document.querySelector('[wm-flappy]').appendChild(b.elemento)
-*/
+
 
 //Dá o distanciamento entre as duas barreiras
-function ParDeBarreiras(altura, abertura, x){
+function ParDeBarreiras(altura, abertura, x) {
     //Criando o elemento que vai ficar as duas barreiras
     this.elemento = novoElemento('div', 'par-de-barreiras')
 
-    this.superior = new Barreira(true)//Criando barreira superior
-    this.inferior = new Barreira(false)//Criando barreira infetior
+    this.superior = new Barreira(true) //Criando barreira superior
+    this.inferior = new Barreira(false) //Criando barreira infetior
 
-    this.elemento.appendChild(this.superior.elemento)//Adicionando barreira superior
-    this.elemento.appendChild(this.inferior.elemento)//Adicionando barreira inferior
+    this.elemento.appendChild(this.superior.elemento) //Adicionando barreira superior
+    this.elemento.appendChild(this.inferior.elemento) //Adicionando barreira inferior
 
     //Função de calculo aleatorio da altura das barreiras
     this.sortearAbertura = () => {
@@ -48,16 +44,12 @@ function ParDeBarreiras(altura, abertura, x){
     this.setX = x => this.elemento.style.left = `${x}px`
     this.getLargura = () => this.elemento.clientWidth
 
-    this.sortearAbertura() 
+    this.sortearAbertura()
     this.setX(x)
 }
 
-/*
-const b = new ParDeBarreiras(700, 200, 800)
-document.querySelector('[wm-flappy]').appendChild(b.elemento)
-*/
 
-function Barreiras(altura, largura, abertura, espaco, notificarPonto){
+function Barreiras(altura, largura, abertura, espaco, notificarPonto) {
 
     this.pares = [
         new ParDeBarreiras(altura, abertura, largura),
@@ -70,26 +62,23 @@ function Barreiras(altura, largura, abertura, espaco, notificarPonto){
     this.animar = () => {
         this.pares.forEach(par => {
             par.setX(par.getX() - deslocamento)
-            
+
             // quando o elemento sair da área do jogo
-            if (par.getX() < -par.getLargura()){
+            if (par.getX() < -par.getLargura()) {
                 par.setX(par.getX() + espaco * this.pares.length)
                 par.sortearAbertura()
-            } 
+            }
 
             const meio = largura / 2
-            console.log('Meio', meio)
-            console.log('Ponto de X', par.getX())
-            console.log('Deslocamento', deslocamento)
-            const cruzouOMeio = par.getX() + deslocamento >= meio && par.getX() > meio
-            console.log(cruzouOMeio)
-            if(cruzouOMeio) notificarPonto
+            x = par.elemento.style.left.split('px')[0]
+            const cruzouOMeio = par.getX() + deslocamento >= meio && par.getX() < meio
+            if (cruzouOMeio) notificarPonto()
         })
     }
 
 }
 
-function Passaro(alturaJogo){
+function Passaro(alturaJogo) {
     let voando = false;
     this.elemento = novoElemento('img', 'passaro')
     this.elemento.src = 'imgs/passaro.png'
@@ -104,16 +93,16 @@ function Passaro(alturaJogo){
         const novoY = this.getY() + (voando ? 8 : -5)
         const alturaMaxima = alturaJogo - this.elemento.clientHeight
 
-        if(novoY <= 0){
+        if (novoY <= 0) {
             this.setY(0)
-        } else if(novoY >= alturaMaxima){
+        } else if (novoY >= alturaMaxima) {
             this.setY(alturaMaxima)
         } else {
             this.setY(novoY)
         }
     }
 
-    this.setY(alturaJogo / 2 )
+    this.setY(alturaJogo / 2)
 
 }
 
@@ -126,15 +115,15 @@ function Progresso() {
 }
 
 
-function FlappyBird(){
-    let pontos = 1
+function FlappyBird() {
+    let pontos = 0
 
     const areaDoJogo = document.querySelector('[wm-flappy]')
     const altura = areaDoJogo.clientHeight
     const largura = areaDoJogo.clientWidth
 
     const progresso = new Progresso()
-    const barreiras = new Barreiras(altura, largura, 200, 400, () => Progresso.atualizarPontos(++pontos))
+    const barreiras = new Barreiras(altura, largura, 200, 400, () => progresso.atualizarPontos(++pontos))
     const passaro = new Passaro(altura)
 
     areaDoJogo.appendChild(progresso.elemento)
